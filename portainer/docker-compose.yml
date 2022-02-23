@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  portainer:
+    image: cr.portainer.io/portainer/portainer-ce:2.11.1
+    privileged: true
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    command: -H unix:///var/run/docker.sock
+    networks:
+      - nginx-pm-network
+
+volumes:
+  portainer_data:
+
+networks:
+  nginx-pm-network:
+    external: true

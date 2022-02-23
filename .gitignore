@@ -1,0 +1,8 @@
+*/.env
+.git
+.gitattributes
+.idea
+.vscode
+mariadb
+nginx/nginx.conf
+nginx/nginx-ssl.conf

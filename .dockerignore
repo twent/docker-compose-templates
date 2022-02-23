@@ -1,0 +1,11 @@
+*/.env
+.git
+.gitattributes
+docker-compose.yml
+.dockerignore
+.idea
+.vscode
+wordpress
+mariadb
+nginx/nginx.conf
+nginx/nginx-ssl.conf
