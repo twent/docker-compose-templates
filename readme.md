@@ -9,3 +9,4 @@
 2) [Portainer](https://github.com/twent/docker-compose-templates/tree/main/portainer) - управление контейнерами.
 3) [Wireguard VPN](https://github.com/twent/docker-compose-templates/tree/main/wireguard)
 4) [Wordpress](https://github.com/twent/docker-compose-templates/tree/main/wordpress/)
+5) [NodeJS + Postgres](https://github.com/twent/docker-compose-templates/tree/main/nodejs/)
