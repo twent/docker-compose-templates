@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  nodejs:
+    image: node:16.14-slim
+    container_name: nodejs
+    restart: unless-stopped
+    user: node
+    working_dir: /home/node/app
+    env_file: .env
+    environment:
+      - DATABASE_URL=postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@nodejs-db:5432/$POSTGRES_DB
+      - NODE_ENV=production
+    ports:
+      - "8082:3000"
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    networks:
+      - node-network
+      - nginx-pm-network
+    depends_on:
+      - nodejs-db
+    command: 'yarn run start'
+
+  nodejs-db:
+    image: postgres:14.2-alpine
+    container_name: node-db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+    #ports:
+    #  - '5432:5432'
+    volumes:
+      - nodejs-db:/var/lib/postgresql/data
+    networks:
+      - node-network
+      - nginx-pm-network
+
+  nodejs-pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=$PGADMIN_DEFAULT_EMAIL
+      - PGADMIN_DEFAULT_PASSWORD=$PGADMIN_DEFAULT_PASSWORD
+    ports:
+      - "8083:80"
+    depends_on:
+      - nodejs-db
+
+volumes:
+  nodejs-db:
+  node_modules:
+
+networks:
+  node-network:
+    driver: bridge
+  nginx-pm-network:
+    external: true
