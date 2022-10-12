@@ -1,0 +1,48 @@
+version: "3.7"
+
+services:
+  gitea-server:
+    container_name: gitea-server
+    image: gitea/gitea:1.17.1-rootless
+    env_file:
+      - .env
+    restart: unless-stopped
+    volumes:
+      - gitea-data:/var/lib/gitea
+      - gitea-config:/etc/gitea
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      #- /home/git/.ssh/:/data/git/.ssh
+    ports:
+      - "3000:3000"
+      - "2222:2222"
+    depends_on:
+      - gitea-db
+    networks:
+      - gitea-net
+      # - nginx-pm-network
+
+  gitea-db:
+    container_name: gitea-db
+    image: postgres:14.5-alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - gitea-db-data:/var/lib/postgresql/data
+    ports:
+      - "54322:5432"
+    networks:
+      - gitea-net
+      # - nginx-pm-network
+
+volumes:
+  gitea-data:
+  gitea-config:
+  gitea-db-data:
+
+networks:
+  gitea-net:
+    name: gitea-net
+  # nginx-pm-network:
+    # external: true
