@@ -10,4 +10,4 @@
 3. [Wireguard VPN](https://github.com/twent/docker-compose-templates/tree/main/wireguard)
 4. [Wordpress](https://github.com/twent/docker-compose-templates/tree/main/wordpress/)
 5. [NodeJS + Postgres](https://github.com/twent/docker-compose-templates/tree/main/nodejs/)
-6. [Gitea + Postgres](https://github.com/twent/docker-compose-templates/tree/main/nodejs/)
+6. [Gitea + Postgres](https://github.com/twent/docker-compose-templates/tree/main/gitea/)
