@@ -1,0 +1,97 @@
+version: "3.8"
+
+services:
+
+  drone-a:
+    container_name: drone-a
+    image: drone/drone:2.13
+    volumes:
+      - drone-a-data:/var/lib/drone/
+    env_file:
+      - .env
+    depends_on:
+      drone-db:
+        condition: service_healthy
+    networks:
+      - gitea-net
+      # - nginx-pm-network:
+
+  drone-b:
+    container_name: drone-b
+    image: drone/drone:2.13
+    volumes:
+      - drone-b-data:/var/lib/drone/
+    env_file:
+      - .env
+    depends_on:
+      - drone-a
+    networks:
+      - gitea-net
+      # - nginx-pm-network
+
+  drone-runner:
+    container_name: drone-runner
+    image: drone/drone-runner-docker:1.8
+    env_file:
+      - .env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - drone-runner-data:/data
+    depends_on:
+      - drone-proxy
+      - drone-b
+    networks:
+      - gitea-net
+      # - nginx-pm-network
+
+  drone-redis-server:
+    container_name: drone-redis-server
+    image: redis
+    networks:
+      - gitea-net
+      # - nginx-pm-network
+
+  drone-proxy:
+    container_name: drone-proxy
+    image: haproxy:2.6
+    ports:
+      - 127.0.0.1:2080:80
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    depends_on:
+      - drone-a
+    networks:
+      - gitea-net
+      # - nginx-pm-network
+
+  drone-db:
+    container_name: drone-db
+    image: postgres:14.5-alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - drone-db-data:/var/lib/postgresql/data
+    ports:
+      - 54323:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gitea-net
+      # - nginx-pm-network
+
+volumes:
+  drone-a-data:
+  drone-b-data:
+  drone-runner-data:
+  drone-db-data:
+
+networks:
+  gitea-net:
+    name: gitea-net
+    external: true
+  # nginx-pm-network:
+    # external: true
