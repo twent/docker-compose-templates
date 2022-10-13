@@ -14,8 +14,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
       #- /home/git/.ssh/:/data/git/.ssh
     ports:
-      - "3000:3000"
-      - "2222:2222"
+      - 127.0.0.1:3000:3000
+      - 127.0.0.1:2222:2222
     depends_on:
       - gitea-db
     networks:
@@ -31,7 +31,7 @@ services:
     volumes:
       - gitea-db-data:/var/lib/postgresql/data
     ports:
-      - "54322:5432"
+      - 127.0.0.1:54322:5432
     networks:
       - gitea-net
       # - nginx-pm-network
@@ -44,5 +44,6 @@ volumes:
 networks:
   gitea-net:
     name: gitea-net
+    external: true
   # nginx-pm-network:
     # external: true
