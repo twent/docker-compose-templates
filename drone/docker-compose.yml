@@ -55,7 +55,7 @@ services:
     container_name: drone-proxy
     image: haproxy:2.6
     ports:
-      - 127.0.0.1:2080:80
+      - 2080:80
     volumes:
       - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
     depends_on:
