@@ -6,8 +6,8 @@
 
  ``docker network create gitea-net``
 
-Если нужен CI/CD (Drone), то добавляем OAuth приложение в настройках (http://localhost:3000/user/settings/applications).
+Если нужен CI/CD (Drone), то добавляем OAuth приложения в настройках (http://192.168.0.230:3000/user/settings/applications).
 1. Имя приложения: Drone
-2. URL: http://HOST_DRONE_SERVER:DRONE_PORT/login
+   URL: http://192.168.0.220:2080/login
 
 Docker-compose для [Drone](https://github.com/twent/docker-compose-templates/tree/main/drone/)
